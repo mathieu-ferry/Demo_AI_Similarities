@@ -6,14 +6,25 @@ property addressColExpectedSchema : Collection
 property customerSystemPrompt : Text
 property addressSystemPrompt : Text
 property singleCustomerSystemPrompt : Text
-
+property customerGenBot : cs.AIKit.OpenAIChatHelper
+property responseData : Text
+property UICallback_onData : 4D.Function
+property UICallback_onTerminate : 4D.Function
+property generated : Integer
+property alreadyThere : Integer
+property quantityBy : Integer
+property quantity : Integer
 
 Class extends AI_Agent
 
-Class constructor($providerName : Text; $model : Text)
-	Super($providerName; $model)
-	This.customerExpectedSchema:={firstname: "firstname"; lastname: "lastname"; email: "firstname.lastname@randomdomain.com"; phone: "random phone number"}
-	This.addressExpectedSchema:={streetNumber: "number"; streetName: "street name"; apartment: "number"; builing: "building"; poBox: "po box"; city: "city"; region: "region"; postalCode: "postal code"; country: "country"}
+
+singleton Class constructor()
+	Super()
+	//This.setAgent($providerName; $model)
+	This.responseData:=""
+	This.addressExpectedSchema:={streetNumber: "number as string"; streetName: "street name"; apartment: "number as string"; builing: "building"; poBox: "po box"; city: "city"; region: "region"; postalCode: "postal code as string"; country: "country"}
+	This.customerExpectedSchema:={firstname: "firstname"; lastname: "lastname"; email: "firstname.lastname@randomdomain.com"; phone: "random phone number as string"; address: This.addressExpectedSchema}
+	
 	This.customerColExpectedSchema:=[This.customerExpectedSchema]
 	This.addressColExpectedSchema:=[This.addressColExpectedSchema]
 	This.singleCustomerExpectedSchema:=OB Copy(This.customerExpectedSchema)
@@ -147,6 +158,94 @@ Function generateCustomers($quantity : Integer; $quantityBy : Integer; $callback
 			$failedAttempts+=1
 		End if 
 	End while 
+	
+	
+Function anotherOnData($result : cs.AIKit.OpenAIChatCompletionsResult)
+	
+	
+	If ($result.success)
+		cs.AI_DataGenerator.me.responseData+=$result.choice.delta.text
+		cs.AI_DataGenerator.me.UICallback_onData.call(Form; $result.choice.delta.text)
+	End if 
+	
+Function anotherOnTerminate($result : cs.AIKit.OpenAIChatCompletionsResult)
+	var $AIResponse : Object
+	var $item : Object
+	var $customer : cs.customerEntity
+	var $prompt : Text
+	var $toGenerate : Integer
+	
+	If ($result.success)
+		cs.AI_DataGenerator.me.responseData+=$result.choice.delta.text
+		cs.AI_DataGenerator.me.UICallback_onData.call(Form; $result.choice.delta.text)
+		cs.AI_DataGenerator.me.UICallback_onData.call(Form; "\n")
+		
+		$AIResponse:=cs.AI_DataGenerator.me.getAIStructuredResponseFromText(cs.AI_DataGenerator.me.responseData; Is collection)
+		If ($AIResponse.success)
+			For each ($item; $AIResponse.response)
+				$customer:=ds.customer.newCustomerFromObject($item)
+				$customer.save()
+			End for each 
+		Else 
+		End if 
+		
+		cs.AI_DataGenerator.me.generated:=ds.customer.all().length-cs.AI_DataGenerator.me.alreadyThere
+		If (cs.AI_DataGenerator.me.generated<cs.AI_DataGenerator.me.quantity)
+			cs.AI_DataGenerator.me.responseData:=""
+			$toGenerate:=(cs.AI_DataGenerator.me.quantityBy<(cs.AI_DataGenerator.me.quantity-cs.AI_DataGenerator.me.generated)) ? cs.AI_DataGenerator.me.quantityBy : (cs.AI_DataGenerator.me.quantity-cs.AI_DataGenerator.me.generated)
+			$prompt:="generate "+String($toGenerate)+" customers"
+			cs.AI_DataGenerator.me.UICallback_onData.call(Form; "prompt : "+$prompt+"\n\n")
+			cs.AI_DataGenerator.me.customerGenBot.prompt($prompt)
+			
+		Else 
+			cs.AI_DataGenerator.me.UICallback_onTerminate.call(Form; "prompt : "+$prompt+"\n\n")
+		End if 
+		
+		
+	End if 
+	
+	
+	
+Function generateCustomersAsync($quantity : Integer; $quantityBy : Integer; $callback : Object)
+	var $toGenerate : Integer
+	var $prompt : Text
+	var $failedAttempts : Integer:=0
+	var $maxFailedAttempts : Integer:=10
+	var $progress : Object
+	var $options : cs.AIKit.OpenAIChatCompletionsParameters
+	
+	This.generated:=0
+	This.quantity:=$quantity
+	This.quantityBy:=$quantityBy
+	This.responseData:=""
+	This.alreadyThere:=ds.customer.all().length
+	$toGenerate:=(This.quantityBy<(This.quantity-This.generated)) ? This.quantityBy : (This.quantity-This.generated)
+	
+	$options:=cs.AIKit.OpenAIChatCompletionsParameters.new()
+	$options.stream:=True
+	
+	// with the chat helper, callbacks seems to be inverted
+	$options.onResponse:=This.anotherOnTerminate
+	$options.onTerminate:=This.anotherOnData
+	
+	This.UICallback_onData:=$callback.onData
+	This.UICallback_onTerminate:=$callback.onData
+	
+	$options.model:=This.model
+	
+	$progress:={}
+	This.customerGenBot:=This.AIClient.chat.create(This.customerSystemPrompt; $options)
+	
+	$prompt:="generate "+String($toGenerate)+" customers"
+	
+	This.UICallback_onData.call(Form; "prompt : "+$prompt+"\n\n")
+	
+	This.customerGenBot.prompt($prompt)
+	
+	
+	
+	
+	
 	
 	
 	

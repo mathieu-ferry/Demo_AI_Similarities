@@ -3,12 +3,14 @@ property modelsEmb : Object
 property providersGen : Object
 property modelsGen : Object
 property actions : Object
+property AIText : Text
 
 Class constructor()
 	var $providers : cs.providerSettingsSelection
 	var $provider : cs.providerSettingsEntity
 	var $models : Collection
 	
+	This.AIText:=""
 	This.providersEmb:={values: []; index: 0}
 	This.modelsEmb:={values: []; index: 0}
 	This.providersGen:={values: []; index: 0}
@@ -79,14 +81,29 @@ Function btnGenerateCustomersEventHandler($formEventCode : Integer)
 	End case 
 	
 	
-Function gencust()
+Function btnCustAsyncEventHandler($formEventCode : Integer)
 	var $customerGenerator : cs.AI_DataGenerator
 	var $formulaCallback : 4D.Function
+	var $callbackObject : Object
 	
-	$customerGenerator:=cs.AI_DataGenerator.new($formObject.providersGen.currentValue; $formObject.modelsGen.currentValue)
-	$customerGenerator.generateCustomers($formObject.actions.generatingCustomers.quantity; $formObject.actions.generatingCustomers.quantityBy; {window: $window; formula: Formula($formObject.progressGenerateCustomers($1))})
-	$customerGenerator.populateAddresses(10; {window: $window; formula: Formula($formObject.progressGenerateCustomers($1))})
-	CALL FORM($window; Formula($formObject.terminateGenerateCustomers()))
+	Case of 
+		: ($formEventCode=On Clicked)
+			This.actions.generatingCustomers.running:=1
+			This.actions.generatingCustomers.progress:={value: 0; message: "Generating customers"}
+			
+			OBJECT SET VISIBLE(*; "customerGen@"; True)
+			OBJECT SET VISIBLE(*; "btnGenerateCustomers"; False)
+			
+			$callbackObject:={}
+			$callbackObject.onData:=This.updateAIText
+			$callbackObject.onTerminate:=This.terminateGenerateCustomers
+			Form.AIText:=""
+			cs.AI_DataGenerator.me.setAgent(This.providersGen.currentValue; This.modelsGen.currentValue)
+			cs.AI_DataGenerator.me.generateCustomersAsync(This.actions.generatingCustomers.quantity; This.actions.generatingCustomers.quantityBy; $callbackObject)
+			//$customerGenerator.populateAddressesAsync(10; $callbackObject)
+			//CALL FORM($window; Formula($formObject.terminateGenerateCustomers()))
+			
+	End case 
 	
 	
 	
@@ -120,9 +137,12 @@ Function terminateGenerateCustomers_()
 	OBJECT SET VISIBLE(*; "customerGen@"; False)
 	OBJECT SET VISIBLE(*; "btnGenerateCustomers"; True)
 	
-	
 Function terminateGenerateCustomers()
-	EXECUTE METHOD IN SUBFORM("Subform"; This.terminateGenerateCustomers_; *)
+	//EXECUTE METHOD IN SUBFORM("Subform"; This.terminateGenerateCustomers_; *)
+	EXECUTE METHOD IN SUBFORM("Subform"; Formula(OBJECT SET VISIBLE(*; "customerGen@"; False)))
+	EXECUTE METHOD IN SUBFORM("Subform"; Formula(OBJECT SET VISIBLE(*; "btnGenerateCustomers"; True)))
+	
+	
 	
 Function progressGenerateCustomers_($progress : Object)
 	Form.actions.generatingCustomers.progress.value:=$progress.value
@@ -130,6 +150,17 @@ Function progressGenerateCustomers_($progress : Object)
 	
 Function progressGenerateCustomers($progress : Object)
 	EXECUTE METHOD IN SUBFORM("Subform"; This.progressGenerateCustomers_; *; $progress)
+	
+Function updateAIText($resultText : Text)
+	EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.AIText+=$1); *; $resultText)
+	
+	
+	//Attempt to scroll down the input area..
+	EXECUTE METHOD IN SUBFORM("Subform"; Formula(HIGHLIGHT TEXT(*; "InputAIText"; Length(Form.AIText); Length(Form.AIText))))
+	EXECUTE METHOD IN SUBFORM("Subform"; Formula(GOTO OBJECT(*; "InputAIText")))
+	
+Function terminateAIText($resultText : Text)
+	//EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.AIText+=$1); *; $resultText)
 	
 	
 Function terminateVectorizing_()
