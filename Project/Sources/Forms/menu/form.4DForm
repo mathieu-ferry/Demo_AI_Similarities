@@ -49,8 +49,8 @@
 					"type": "subform",
 					"left": 0,
 					"top": 34,
-					"width": 1909,
-					"height": 660,
+					"width": 1448,
+					"height": 708,
 					"dataSource": "Form:C1466.subformName",
 					"dataSourceTypeHint": "text",
 					"detailForm": "intro"
@@ -60,7 +60,7 @@
 					"text": "Tab control",
 					"top": 4,
 					"left": 0,
-					"width": 1904,
+					"width": 1448,
 					"height": 28,
 					"dataSource": "Form:C1466.menu",
 					"fontFamily": "Avenir Light",
@@ -73,7 +73,7 @@
 			}
 		}
 	],
-	"geometryStamp": 218,
+	"geometryStamp": 222,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

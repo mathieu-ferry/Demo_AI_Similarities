@@ -41,38 +41,28 @@
 					"top": 0,
 					"left": 0,
 					"width": 1450,
-					"height": 660,
+					"height": 708,
 					"right": 1450,
-					"bottom": 660,
+					"bottom": 708,
 					"strokeWidth": 0,
 					"stroke": "transparent"
 				},
 				"Rectangle4": {
 					"type": "rectangle",
-					"top": 324,
-					"left": 1062,
-					"width": 358,
-					"height": 93,
+					"top": 107,
+					"left": 1088,
+					"width": 311,
+					"height": 82,
 					"borderRadius": 10,
 					"stroke": "#EBEBEB",
 					"fill": "transparent"
 				},
-				"Rectangle3": {
-					"type": "rectangle",
-					"top": 99,
-					"left": 685,
-					"width": 735,
-					"height": 185,
-					"borderRadius": 10,
-					"stroke": "#EBEBEB",
-					"fill": "#EFEFFF"
-				},
 				"Rectangle2": {
 					"type": "rectangle",
-					"top": 99,
+					"top": 100,
 					"left": 296,
 					"width": 371,
-					"height": 185,
+					"height": 388,
 					"borderRadius": 10,
 					"stroke": "#EBEBEB",
 					"fill": "#EFEFFF"
@@ -80,7 +70,7 @@
 				"Input": {
 					"type": "input",
 					"left": 408,
-					"top": 136,
+					"top": 137,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -94,7 +84,7 @@
 				"Text": {
 					"type": "text",
 					"text": "Firstname",
-					"top": 136,
+					"top": 137,
 					"left": 308,
 					"width": 100,
 					"height": 20,
@@ -104,7 +94,7 @@
 				"Input1": {
 					"type": "input",
 					"left": 408,
-					"top": 164,
+					"top": 161,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -118,7 +108,7 @@
 				"Text1": {
 					"type": "text",
 					"text": "Lastname",
-					"top": 164,
+					"top": 161,
 					"left": 308,
 					"width": 100,
 					"height": 20,
@@ -128,7 +118,7 @@
 				"Input2": {
 					"type": "input",
 					"left": 408,
-					"top": 192,
+					"top": 185,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -142,7 +132,7 @@
 				"Text2": {
 					"type": "text",
 					"text": "Email",
-					"top": 192,
+					"top": 185,
 					"left": 308,
 					"width": 100,
 					"height": 20,
@@ -152,7 +142,7 @@
 				"Input3": {
 					"type": "input",
 					"left": 408,
-					"top": 220,
+					"top": 209,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -166,7 +156,7 @@
 				"Text3": {
 					"type": "text",
 					"text": "Phone",
-					"top": 220,
+					"top": 209,
 					"left": 308,
 					"width": 100,
 					"height": 20,
@@ -176,17 +166,18 @@
 				"Text4": {
 					"type": "text",
 					"text": "Valid address?",
-					"top": 249,
-					"left": 1062,
+					"top": 237,
+					"left": 533,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
-					"fontSize": 13
+					"fontSize": 13,
+					"textAlign": "right"
 				},
 				"Input4": {
 					"type": "input",
-					"left": 796,
-					"top": 136,
+					"left": 407,
+					"top": 263,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -200,8 +191,8 @@
 				"Text5": {
 					"type": "text",
 					"text": "Street number",
-					"top": 136,
-					"left": 696,
+					"top": 263,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -209,8 +200,8 @@
 				},
 				"Input5": {
 					"type": "input",
-					"left": 796,
-					"top": 164,
+					"left": 407,
+					"top": 287,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -224,8 +215,8 @@
 				"Text6": {
 					"type": "text",
 					"text": "Street name",
-					"top": 164,
-					"left": 696,
+					"top": 287,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -233,8 +224,8 @@
 				},
 				"Input6": {
 					"type": "input",
-					"left": 796,
-					"top": 192,
+					"left": 407,
+					"top": 311,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -248,8 +239,8 @@
 				"Text7": {
 					"type": "text",
 					"text": "Apartment",
-					"top": 192,
-					"left": 696,
+					"top": 311,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -257,8 +248,8 @@
 				},
 				"Input7": {
 					"type": "input",
-					"left": 796,
-					"top": 220,
+					"left": 407,
+					"top": 335,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -272,8 +263,8 @@
 				"Text8": {
 					"type": "text",
 					"text": "Building",
-					"top": 220,
-					"left": 696,
+					"top": 335,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -281,8 +272,8 @@
 				},
 				"Input8": {
 					"type": "input",
-					"left": 796,
-					"top": 249,
+					"left": 407,
+					"top": 360,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -296,8 +287,8 @@
 				"Text9": {
 					"type": "text",
 					"text": "PO Box",
-					"top": 249,
-					"left": 696,
+					"top": 360,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -305,8 +296,8 @@
 				},
 				"Input9": {
 					"type": "input",
-					"left": 1163,
-					"top": 136,
+					"left": 407,
+					"top": 384,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -320,8 +311,8 @@
 				"Text10": {
 					"type": "text",
 					"text": "City",
-					"top": 136,
-					"left": 1063,
+					"top": 384,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -329,8 +320,8 @@
 				},
 				"Input10": {
 					"type": "input",
-					"left": 1163,
-					"top": 164,
+					"left": 407,
+					"top": 408,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -344,8 +335,8 @@
 				"Text11": {
 					"type": "text",
 					"text": "Region",
-					"top": 164,
-					"left": 1063,
+					"top": 408,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -353,8 +344,8 @@
 				},
 				"Input11": {
 					"type": "input",
-					"left": 1163,
-					"top": 220,
+					"left": 407,
+					"top": 456,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -368,8 +359,8 @@
 				"Text12": {
 					"type": "text",
 					"text": "Country",
-					"top": 220,
-					"left": 1063,
+					"top": 456,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -378,8 +369,8 @@
 				"btnSaveCustomer": {
 					"type": "button",
 					"text": "Save",
-					"top": 598,
-					"left": 1310,
+					"top": 482,
+					"left": 538,
 					"width": 110,
 					"height": 31,
 					"events": [
@@ -398,8 +389,8 @@
 				"Check Box": {
 					"type": "checkbox",
 					"text": "",
-					"top": 244,
-					"left": 1161,
+					"top": 232,
+					"left": 635,
 					"width": 26,
 					"height": 25,
 					"events": [
@@ -412,10 +403,10 @@
 				},
 				"Input12": {
 					"type": "input",
-					"left": 1069,
-					"top": 332,
-					"width": 339,
-					"height": 37,
+					"left": 1098,
+					"top": 115,
+					"width": 290,
+					"height": 55,
 					"dataSource": "Form:C1466.actions.formattingAddress.textToFormat",
 					"fontFamily": "Avenir Light",
 					"fontSize": 13,
@@ -427,8 +418,8 @@
 				"btnFormatAddress": {
 					"type": "button",
 					"text": "🪄 Format address",
-					"top": 373,
-					"left": 1233,
+					"top": 169,
+					"left": 1213,
 					"width": 180,
 					"height": 31,
 					"events": [
@@ -441,8 +432,8 @@
 				},
 				"Input13": {
 					"type": "input",
-					"left": 1163,
-					"top": 192,
+					"left": 407,
+					"top": 432,
 					"width": 240,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -456,8 +447,8 @@
 				"Text13": {
 					"type": "text",
 					"text": "Postal Code",
-					"top": 192,
-					"left": 1063,
+					"top": 432,
+					"left": 307,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
@@ -465,10 +456,10 @@
 				},
 				"List Box": {
 					"type": "listbox",
-					"left": 282,
-					"top": 444,
-					"width": 1137,
-					"height": 145,
+					"left": 296,
+					"top": 547,
+					"width": 1138,
+					"height": 127,
 					"events": [
 						"onClick",
 						"onHeaderClick",
@@ -551,10 +542,10 @@
 				},
 				"Ruler": {
 					"type": "ruler",
-					"left": 308,
-					"top": 605,
-					"width": 195,
-					"height": 16,
+					"left": 681,
+					"top": 528,
+					"width": 214,
+					"height": 11,
 					"max": 100,
 					"events": [
 						"onDataChange"
@@ -573,8 +564,8 @@
 				"btnGenerateCustomer": {
 					"type": "button",
 					"text": "🪄 Generate customer",
-					"top": 324,
-					"left": 766,
+					"top": 169,
+					"left": 812,
 					"width": 200,
 					"height": 32,
 					"events": [
@@ -588,8 +579,8 @@
 				"Text21": {
 					"type": "text",
 					"text": "Similar customers",
-					"top": 417,
-					"left": 282,
+					"top": 518,
+					"left": 283,
 					"width": 403,
 					"height": 22,
 					"fontFamily": "Avenir Light",
@@ -598,8 +589,8 @@
 				"btnSearchSimilarities": {
 					"type": "button",
 					"text": "🪄 Search similarities",
-					"top": 598,
-					"left": 511,
+					"top": 496,
+					"left": 681,
 					"width": 214,
 					"height": 31,
 					"events": [
@@ -611,9 +602,9 @@
 				},
 				"providersList": {
 					"type": "dropdown",
-					"left": 408,
-					"top": 327,
-					"width": 240,
+					"left": 812,
+					"top": 108,
+					"width": 200,
 					"height": 27,
 					"events": [
 						"onDataChange"
@@ -626,9 +617,9 @@
 				},
 				"modelsList": {
 					"type": "dropdown",
-					"left": 408,
-					"top": 359,
-					"width": 240,
+					"left": 812,
+					"top": 136,
+					"width": 200,
 					"height": 27,
 					"events": [
 						"onDataChange"
@@ -641,9 +632,9 @@
 				"Text22": {
 					"type": "text",
 					"text": "Provider",
-					"top": 331,
-					"left": 307,
-					"width": 100,
+					"top": 111,
+					"left": 705,
+					"width": 53,
 					"height": 18,
 					"fontFamily": "Avenir Light",
 					"fontSize": 13
@@ -651,9 +642,9 @@
 				"Text23": {
 					"type": "text",
 					"text": "Model",
-					"top": 364,
-					"left": 307,
-					"width": 100,
+					"top": 139,
+					"left": 705,
+					"width": 53,
 					"height": 18,
 					"fontFamily": "Avenir Light",
 					"fontSize": 13
@@ -661,18 +652,19 @@
 				"Text27": {
 					"type": "text",
 					"text": "Valid customer?",
-					"top": 249,
-					"left": 308,
+					"top": 114,
+					"left": 533,
 					"width": 100,
 					"height": 20,
 					"fontFamily": "Avenir Light",
-					"fontSize": 13
+					"fontSize": 13,
+					"textAlign": "right"
 				},
 				"Check Box1": {
 					"type": "checkbox",
 					"text": "",
-					"top": 244,
-					"left": 405,
+					"top": 109,
+					"left": 637,
 					"width": 24,
 					"height": 25,
 					"events": [
@@ -686,34 +678,34 @@
 				},
 				"customerGenSpinner": {
 					"type": "spinner",
-					"left": 922,
-					"top": 324,
+					"left": 968,
+					"top": 169,
 					"width": 44,
 					"height": 31,
 					"dataSource": "Form:C1466.actions.generatingCustomer.running"
 				},
 				"addressFormattingSpinner": {
 					"type": "spinner",
-					"left": 1369,
-					"top": 374,
+					"left": 1349,
+					"top": 170,
 					"width": 44,
 					"height": 31,
 					"dataSource": "Form:C1466.actions.formattingAddress.running"
 				},
 				"similaritiesSearchSpinner": {
 					"type": "spinner",
-					"left": 681,
-					"top": 598,
+					"left": 851,
+					"top": 496,
 					"width": 44,
 					"height": 31,
 					"dataSource": "Form:C1466.actions.searchingSimilarities.running"
 				},
 				"customerGenMessage": {
 					"type": "input",
-					"left": 771,
-					"top": 363,
-					"width": 195,
-					"height": 37,
+					"left": 705,
+					"top": 200,
+					"width": 307,
+					"height": 19,
 					"dataSource": "Form:C1466.actions.generatingCustomer.progress.message",
 					"enterable": false,
 					"focusable": false,
@@ -721,14 +713,15 @@
 					"fontFamily": "Avenir Light",
 					"fontSize": 13,
 					"dataSourceTypeHint": "text",
-					"fill": "transparent"
+					"fill": "transparent",
+					"textAlign": "right"
 				},
 				"addressFormattingMessage": {
 					"type": "input",
-					"left": 1069,
-					"top": 371,
-					"width": 154,
-					"height": 37,
+					"left": 1097,
+					"top": 200,
+					"width": 295,
+					"height": 19,
 					"dataSource": "Form:C1466.actions.formattingAddress.progress.message",
 					"enterable": false,
 					"focusable": false,
@@ -736,13 +729,14 @@
 					"fontFamily": "Avenir Light",
 					"fontSize": 13,
 					"dataSourceTypeHint": "text",
-					"fill": "transparent"
+					"fill": "transparent",
+					"textAlign": "right"
 				},
 				"similaritiesSearchMessage": {
 					"type": "input",
-					"left": 732,
-					"top": 604,
-					"width": 214,
+					"left": 903,
+					"top": 502,
+					"width": 325,
 					"height": 19,
 					"dataSource": "Form:C1466.actions.searchingSimilarities.progress.message",
 					"enterable": false,
@@ -755,8 +749,8 @@
 				"btnNewCustomer": {
 					"type": "button",
 					"text": "New",
-					"top": 598,
-					"left": 1191,
+					"top": 482,
+					"left": 424,
 					"width": 110,
 					"height": 31,
 					"events": [
@@ -774,7 +768,7 @@
 					"top": 64,
 					"left": 23,
 					"width": 239,
-					"height": 582,
+					"height": 626,
 					"borderRadius": 10,
 					"stroke": "#EBEBEB",
 					"fill": "#FBFBFB"
@@ -785,7 +779,7 @@
 					"top": 72,
 					"left": 32,
 					"width": 219,
-					"height": 558,
+					"height": 602,
 					"fontFamily": "Avenir Light",
 					"fontSize": 13
 				},
@@ -802,8 +796,8 @@
 				"Text14": {
 					"type": "text",
 					"text": "AI assist tools",
-					"top": 302,
-					"left": 283,
+					"top": 74,
+					"left": 681,
 					"width": 403,
 					"height": 22,
 					"fontFamily": "Avenir Light",
@@ -812,7 +806,7 @@
 				"Text16": {
 					"type": "text",
 					"text": "Identity and contact",
-					"top": 111,
+					"top": 112,
 					"left": 307,
 					"width": 196,
 					"height": 18,
@@ -823,8 +817,8 @@
 				"Text17": {
 					"type": "text",
 					"text": "Address",
-					"top": 111,
-					"left": 696,
+					"top": 238,
+					"left": 307,
 					"width": 196,
 					"height": 18,
 					"fontFamily": "Avenir Light",
@@ -849,6 +843,33 @@
 					"height": 28,
 					"fontFamily": "Avenir Light",
 					"fontSize": 20
+				},
+				"InputAIText": {
+					"type": "input",
+					"left": 681,
+					"top": 260,
+					"width": 718,
+					"height": 217,
+					"dataSource": "Form:C1466.AIText",
+					"enterable": false,
+					"multiline": "yes",
+					"fontFamily": "Avenir Light",
+					"fontSize": 13,
+					"scrollbarHorizontal": "hidden",
+					"contextMenu": "automatic",
+					"showSelection": false,
+					"wordwrap": "normal"
+				},
+				"Text19": {
+					"type": "text",
+					"text": "AI interactions",
+					"top": 231,
+					"left": 681,
+					"width": 317,
+					"height": 22,
+					"fontFamily": "Avenir Light",
+					"fontSize": 16,
+					"textAlign": "left"
 				}
 			},
 			"entryOrder": [
@@ -873,54 +894,37 @@
 				"btnSearchSimilarities",
 				"List Box",
 				"btnNewCustomer",
-				"btnSaveCustomer"
+				"btnSaveCustomer",
+				"InputAIText"
 			]
 		}
 	],
-	"geometryStamp": 1480,
+	"geometryStamp": 2123,
 	"editor": {
 		"groups": {
 			"Group": [
-				"Rectangle2",
-				"Input",
-				"Text",
-				"Input1",
-				"Text1",
-				"Input2",
-				"Text2",
-				"Input3",
-				"Text3",
-				"Text27",
-				"Check Box1",
-				"Text16"
+				"btnFormatAddress",
+				"addressFormattingSpinner",
+				"Input12",
+				"addressFormattingMessage",
+				"Rectangle4"
 			],
 			"Group1": [
-				"Rectangle3",
-				"Text4",
-				"Input4",
-				"Text5",
-				"Input5",
-				"Text6",
-				"Input6",
-				"Text7",
-				"Input7",
-				"Text8",
-				"Input8",
-				"Text9",
-				"Input9",
-				"Text10",
-				"Input10",
-				"Text11",
-				"Input11",
-				"Text12",
-				"Check Box",
-				"Input13",
-				"Text13",
-				"Text17"
+				"btnSearchSimilarities",
+				"similaritiesSearchSpinner"
 			],
 			"Group2": [
 				"Rectangle1",
 				"Text29"
+			],
+			"Group3": [
+				"btnGenerateCustomer",
+				"customerGenSpinner",
+				"providersList",
+				"modelsList",
+				"Text22",
+				"Text23",
+				"customerGenMessage"
 			]
 		},
 		"activeView": "View 1",

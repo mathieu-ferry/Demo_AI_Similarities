@@ -2,38 +2,31 @@ property model : Text
 property provider : Text
 property AIClient : cs.AIKit.OpenAI
 
-
 Class constructor()
-/*
-Class constructor($providerName : Text; $model : Text)
-var $provider : cs.providerSettingsEntity
-var $AIClient : cs.AIKit.OpenAI
-	
-$provider:=ds.providerSettings.query("name = :1"; $providerName).first()
-	
-This.provider:=$providerName
-This.model:=$model
-This.AIClient:=cs.AIKit.OpenAI.new($provider.key)
-If ($provider.url#"")
-This.AIClient.baseURL:=$provider.url
-End if 
-*/
-	
+	This.model:=""
+	This.provider:=""
 	
 Function setAgent($providerName : Text; $model : Text)
 	var $provider : cs.providerSettingsEntity
 	var $AIClient : cs.AIKit.OpenAI
 	
-	$provider:=ds.providerSettings.query("name = :1"; $providerName).first()
+	//Fixme: checkif provider still exists
 	
-	This.provider:=$providerName
-	This.model:=$model
-	This.AIClient:=cs.AIKit.OpenAI.new($provider.key)
-	If ($provider.url#"")
-		This.AIClient.baseURL:=$provider.url
+	If ((This.provider#$providerName) || (This.model#$model))
+		$provider:=ds.providerSettings.query("name = :1"; $providerName).first()
+		
+		If ($provider=Null)
+			throw(999; "Provider is not set in settings")
+			return 
+		End if 
+		
+		This.provider:=$providerName
+		This.model:=$model
+		This.AIClient:=cs.AIKit.OpenAI.new($provider.key)
+		If ($provider.url#"")
+			This.AIClient.baseURL:=$provider.url
+		End if 
 	End if 
-	
-	
 	
 Function getAIStructuredResponse($AIresponse : Object; $expectedFormat : Integer) : Object
 	var $jsonContent : Text
@@ -80,6 +73,8 @@ Function getAIStructuredResponse($AIresponse : Object; $expectedFormat : Integer
 		If ($response=Null)
 			return {success: False; response: Null; kind: Null; error: "Could not parse AIResponse with the expected format"}
 		End if 
+	Else 
+		return {success: False; response: Null; kind: Null; error: "Could not parse AIResponse with the expected format"}
 	End if 
 	
 	return {success: True; response: $response; kind: $expectedFormat; error: Null}
@@ -91,6 +86,8 @@ Function getAIStructuredResponseFromText($AIresponse : Text; $expectedFormat : I
 	var $jsonStart : Integer
 	var $returnObject : Object:={}
 	var $response : Variant
+	var $thinkStart : Integer
+	var $thinkEnd : Integer
 	
 	Case of 
 			
@@ -107,9 +104,19 @@ Function getAIStructuredResponseFromText($AIresponse : Text; $expectedFormat : I
 			return {success: False; response: Null; kind: Null; error: "Expected format must be one the constant 'is object' or 'is collection' or 'is text'"}
 	End case 
 	
-	If ($charStart="")  //$charStart can either be "" or "{" or "["
+	If ($expectedFormat=Is text)
 		return {success: True; response: $AIresponse; kind: $expectedFormat; error: Null}
 	End if 
+	
+	//Remove <think> </think> part of the answer, from some well known llms
+	$thinkStart:=Position("<think>"; $AIresponse)
+	If ($thinkStart>0)
+		$thinkEnd:=Position("</think>"; $AIresponse)
+		If ($thinkEnd>0)
+			$AIresponse:=Delete string($AIresponse; $thinkStart; $thinkEnd+Length("</think>")-$thinkStart)
+		End if 
+	End if 
+	
 	
 	$jsonStart:=Position($charStart; $AIresponse)
 	If ($jsonStart>0)
@@ -118,7 +125,18 @@ Function getAIStructuredResponseFromText($AIresponse : Text; $expectedFormat : I
 		If ($response=Null)
 			return {success: False; response: Null; kind: Null; error: "Could not parse AIResponse with the expected format"}
 		End if 
+	Else 
+		return {success: False; response: Null; kind: Null; error: "Could not parse AIResponse with the expected format"}
 	End if 
 	
-	return {success: True; response: $response; kind: $expectedFormat; error: Null}
+	Case of 
+		: (($expectedFormat=Is collection) && ($response.length>0) && (Value type($response.first())=Is object))
+			return {success: True; response: $response; kind: $expectedFormat; error: Null}
+			
+		: (($expectedFormat=Is object) && (Value type($response)=Is object))
+			return {success: True; response: $response; kind: $expectedFormat; error: Null}
+		Else 
+			return {success: False; response: Null; kind: Null; error: "Could not parse AIResponse with the expected format"}
+	End case 
+	
 	

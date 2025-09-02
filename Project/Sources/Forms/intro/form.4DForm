@@ -41,7 +41,7 @@
 					"top": 0,
 					"left": 0,
 					"width": 1450,
-					"height": 660,
+					"height": 708,
 					"stroke": "transparent",
 					"strokeWidth": 0
 				},
@@ -392,7 +392,7 @@
 					"left": 858,
 					"top": 457,
 					"width": 280,
-					"height": 172,
+					"height": 216,
 					"events": [
 						"onClick",
 						"onHeaderClick",
@@ -509,7 +509,7 @@
 					"top": 64,
 					"left": 23,
 					"width": 239,
-					"height": 582,
+					"height": 626,
 					"borderRadius": 10,
 					"stroke": "#EBEBEB",
 					"fill": "#FBFBFB"
@@ -520,7 +520,7 @@
 					"top": 73,
 					"left": 32,
 					"width": 219,
-					"height": 556,
+					"height": 600,
 					"fontFamily": "Avenir Light",
 					"fontSize": 13
 				},
@@ -539,7 +539,7 @@
 					"left": 1149,
 					"top": 457,
 					"width": 280,
-					"height": 172,
+					"height": 216,
 					"events": [
 						"onClick",
 						"onHeaderClick",
@@ -607,7 +607,7 @@
 			]
 		}
 	],
-	"geometryStamp": 990,
+	"geometryStamp": 992,
 	"editor": {
 		"groups": {
 			"Group": [

@@ -54,19 +54,17 @@ Function stringify() : Text
 	
 Function vectorize($provider : Text; $model : Text; $force : Boolean)
 	var $objectToVectorize : Object
-	var $vectorizer : cs.AI_Vectorizer
 	
-	$vectorizer:=cs.AI_Vectorizer.new($provider; $model)
+	cs.AI_Vectorizer.me.setAgent($provider; $model)
 	
 	If (($force) || (This.vector=Null))
-		This.vector:=$vectorizer.vectorize(This.stringify())
+		This.vector:=cs.AI_Vectorizer.me.vectorize(This.stringify())
 	End if 
 	
 Function searchSimilarCustomers($targetSimilarity : Real) : Collection
 	var $embeddingInfo : cs.embeddingInfoEntity
 	var $similarCustomersCol : Collection:=[]
 	var $customer : cs.customerEntity
-	var $vectorizer : cs.AI_Vectorizer
 	var $vector : 4D.Vector
 	var $similarity : Real
 	
@@ -76,13 +74,16 @@ Function searchSimilarCustomers($targetSimilarity : Real) : Collection
 	End if 
 	
 	$embeddingInfo:=ds.embeddingInfo.info()
-	$vectorizer:=cs.AI_Vectorizer.new($embeddingInfo.provider; $embeddingInfo.model)
-	$vector:=$vectorizer.vectorize(This.stringify())
+	
+	cs.AI_Vectorizer.me.setAgent($embeddingInfo.provider; $embeddingInfo.model)
+	$vector:=cs.AI_Vectorizer.me.vectorize(This.stringify())
 	
 	For each ($customer; ds.customer.all().minus(This))
-		$similarity:=$vector.cosineSimilarity($customer.vector)
-		If ($similarity>=$targetSimilarity)
-			$similarCustomersCol.push({entity: $customer; customerID: $customer.ID; similarity: $similarity})
+		If ($customer.vector#Null)
+			$similarity:=$vector.cosineSimilarity($customer.vector)
+			If ($similarity>=$targetSimilarity)
+				$similarCustomersCol.push({entity: $customer; customerID: $customer.ID; similarity: $similarity})
+			End if 
 		End if 
 	End for each 
 	$similarCustomersCol:=$similarCustomersCol.orderBy("similarity desc")

@@ -69,19 +69,8 @@ Function providersEmbListEventHandler($formEventCode : Integer)
 			This.modelsEmb:=This.setModelList(This.providersEmb; "embedding")
 	End case 
 	
+	
 Function btnGenerateCustomersEventHandler($formEventCode : Integer)
-	Case of 
-		: ($formEventCode=On Clicked)
-			This.actions.generatingCustomers.running:=1
-			This.actions.generatingCustomers.progress:={value: 0; message: "Generating customers"}
-			
-			OBJECT SET VISIBLE(*; "customerGen@"; True)
-			OBJECT SET VISIBLE(*; "btnGenerateCustomers"; False)
-			CALL WORKER(String(Session.id)+"-generatingCustomers"; Formula(cs.workerHelper.me.generateCustomers($1; $2)); This; Current form window)
-	End case 
-	
-	
-Function btnCustAsyncEventHandler($formEventCode : Integer)
 	var $customerGenerator : cs.AI_DataGenerator
 	var $formulaCallback : 4D.Function
 	var $callbackObject : Object
@@ -95,17 +84,13 @@ Function btnCustAsyncEventHandler($formEventCode : Integer)
 			OBJECT SET VISIBLE(*; "btnGenerateCustomers"; False)
 			
 			$callbackObject:={}
-			$callbackObject.onData:=This.updateAIText
+			$callbackObject.onProgress:=This.progressGenerateCustomers
 			$callbackObject.onTerminate:=This.terminateGenerateCustomers
 			Form.AIText:=""
-			cs.AI_DataGenerator.me.setAgent(This.providersGen.currentValue; This.modelsGen.currentValue)
-			cs.AI_DataGenerator.me.generateCustomersAsync(This.actions.generatingCustomers.quantity; This.actions.generatingCustomers.quantityBy; $callbackObject)
-			//$customerGenerator.populateAddressesAsync(10; $callbackObject)
-			//CALL FORM($window; Formula($formObject.terminateGenerateCustomers()))
+			cs.AI_CustomersGenerator.me.setAgent(This.providersGen.currentValue; This.modelsGen.currentValue)
+			cs.AI_CustomersGenerator.me.generateCustomersAsync(This.actions.generatingCustomers.quantity; This.actions.generatingCustomers.quantityBy; $callbackObject)
 			
 	End case 
-	
-	
 	
 	
 Function btnVectorizeEventHandler($formEventCode : Integer)
@@ -133,56 +118,50 @@ Function btnDropDataEventHandler($formEventCode : Integer)
 	//MARK: -
 	//MARK: Form actions callback functions
 	
-Function terminateGenerateCustomers_()
-	OBJECT SET VISIBLE(*; "customerGen@"; False)
-	OBJECT SET VISIBLE(*; "btnGenerateCustomers"; True)
-	
 Function terminateGenerateCustomers()
-	//EXECUTE METHOD IN SUBFORM("Subform"; This.terminateGenerateCustomers_; *)
-	EXECUTE METHOD IN SUBFORM("Subform"; Formula(OBJECT SET VISIBLE(*; "customerGen@"; False)))
-	EXECUTE METHOD IN SUBFORM("Subform"; Formula(OBJECT SET VISIBLE(*; "btnGenerateCustomers"; True)))
-	
-	
-	
-Function progressGenerateCustomers_($progress : Object)
-	Form.actions.generatingCustomers.progress.value:=$progress.value
-	Form.actions.generatingCustomers.progress.message:=$progress.message
-	
-Function progressGenerateCustomers($progress : Object)
-	EXECUTE METHOD IN SUBFORM("Subform"; This.progressGenerateCustomers_; *; $progress)
-	
-Function updateAIText($resultText : Text)
-	EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.AIText+=$1); *; $resultText)
-	
-	
-	//Attempt to scroll down the input area..
-	EXECUTE METHOD IN SUBFORM("Subform"; Formula(HIGHLIGHT TEXT(*; "InputAIText"; Length(Form.AIText); Length(Form.AIText))))
-	EXECUTE METHOD IN SUBFORM("Subform"; Formula(GOTO OBJECT(*; "InputAIText")))
-	
-Function terminateAIText($resultText : Text)
-	//EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.AIText+=$1); *; $resultText)
-	
-	
-Function terminateVectorizing_()
-	OBJECT SET VISIBLE(*; "embedding@"; False)
-	OBJECT SET VISIBLE(*; "btnVectorize"; True)
-	
-	If (ds.embeddingInfo.embeddingStatus())
-		Form.actions.embedding.status:="Done"
-		Form.actions.embedding.info:=ds.embeddingInfo.info()
+	If (Current form name="menu")
+		EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.terminateGenerateCustomers()); *)
 	Else 
-		Form.actions.embedding.status:="Missing"
+		OBJECT SET VISIBLE(*; "customerGen@"; False)
+		OBJECT SET VISIBLE(*; "btnGenerateCustomers"; True)
+	End if 
+	
+Function progressGenerateCustomers($resultText : Text; $progress : Object)
+	If (Current form name="menu")
+		EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.progressGenerateCustomers($1; $2)); *; $resultText; $progress)
+	Else 
+		Form.AIText+=$resultText
+		If ($progress#Null)
+			Form.actions.generatingCustomers.progress.value:=$progress.value
+			Form.actions.generatingCustomers.progress.message:=$progress.message
+		End if 
+		//scroll down
+		HIGHLIGHT TEXT(*; "InputAIText"; Length(Form.AIText); Length(Form.AIText))
+		GOTO OBJECT(*; "InputAIText")
 	End if 
 	
 Function terminateVectorizing()
-	EXECUTE METHOD IN SUBFORM("Subform"; This.terminateVectorizing_; *)
-	
-Function progressVectorizing_($progress : Object)
-	Form.actions.embedding.progress.value:=$progress.value
-	Form.actions.embedding.progress.message:=$progress.message
+	If (Current form name="menu")
+		EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.terminateVectorizing()); *)
+	Else 
+		OBJECT SET VISIBLE(*; "embedding@"; False)
+		OBJECT SET VISIBLE(*; "btnVectorize"; True)
+		
+		If (ds.embeddingInfo.embeddingStatus())
+			Form.actions.embedding.status:="Done"
+			Form.actions.embedding.info:=ds.embeddingInfo.info()
+		Else 
+			Form.actions.embedding.status:="Missing"
+		End if 
+	End if 
 	
 Function progressVectorizing($progress : Object)
-	EXECUTE METHOD IN SUBFORM("Subform"; This.progressVectorizing_; *; $progress)
+	If (Current form name="menu")
+		EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.progressVectorizing($1)); *; $progress)
+	Else 
+		Form.actions.embedding.progress.value:=$progress.value
+		Form.actions.embedding.progress.message:=$progress.message
+	End if 
 	
 	
 	//MARK: -

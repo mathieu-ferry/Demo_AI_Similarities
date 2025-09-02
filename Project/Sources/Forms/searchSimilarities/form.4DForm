@@ -41,9 +41,9 @@
 					"top": 0,
 					"left": 0,
 					"width": 1450,
-					"height": 660,
+					"height": 708,
 					"right": 1450,
-					"bottom": 660,
+					"bottom": 708,
 					"stroke": "transparent",
 					"strokeWidth": 0
 				},
@@ -52,7 +52,7 @@
 					"top": 64,
 					"left": 23,
 					"width": 239,
-					"height": 582,
+					"height": 626,
 					"borderRadius": 10,
 					"stroke": "#EBEBEB",
 					"fill": "#FBFBFB"
@@ -62,7 +62,7 @@
 					"left": 283,
 					"top": 102,
 					"width": 1142,
-					"height": 240,
+					"height": 260,
 					"events": [
 						"onClick",
 						"onHeaderClick",
@@ -158,10 +158,10 @@
 				},
 				"List Box1": {
 					"type": "listbox",
-					"left": 283,
-					"top": 389,
+					"left": 282,
+					"top": 411,
 					"width": 1142,
-					"height": 240,
+					"height": 260,
 					"events": [
 						"onClick",
 						"onHeaderClick",
@@ -242,7 +242,7 @@
 				"Ruler": {
 					"type": "ruler",
 					"left": 32,
-					"top": 544,
+					"top": 583,
 					"width": 219,
 					"height": 11,
 					"max": 100,
@@ -263,7 +263,7 @@
 				"btnSearchSimilarities": {
 					"type": "button",
 					"text": "Search similarities",
-					"top": 562,
+					"top": 601,
 					"left": 32,
 					"width": 219,
 					"height": 31,
@@ -298,8 +298,8 @@
 				"Text1": {
 					"type": "text",
 					"text": "Similarities for selected customer",
-					"top": 360,
-					"left": 283,
+					"top": 382,
+					"left": 282,
 					"width": 323,
 					"height": 22,
 					"fontFamily": "Avenir Light",
@@ -308,7 +308,7 @@
 				"similaritiesSearchSpinner": {
 					"type": "spinner",
 					"left": 207,
-					"top": 562,
+					"top": 601,
 					"width": 44,
 					"height": 31,
 					"dataSource": "Form:C1466.actions.searchingSimilarities.running"
@@ -316,7 +316,7 @@
 				"similaritiesSearchMessage": {
 					"type": "input",
 					"left": 32,
-					"top": 600,
+					"top": 639,
 					"width": 219,
 					"height": 37,
 					"dataSource": "Form:C1466.actions.searchingSimilarities.progress.message",
@@ -357,7 +357,7 @@
 			]
 		}
 	],
-	"geometryStamp": 487,
+	"geometryStamp": 494,
 	"method": "method.4dm",
 	"editor": {
 		"groups": {

@@ -74,13 +74,19 @@ Function customersWithSimilarities($targetSimilarity : Real) : Collection
 	$customersX:=ds.customer.all().orderBy("ID")
 	
 	For each ($customerX; $customersX)
-		$customersY:=$customersX.slice($customerX.indexOf()+1)
-		For each ($customerY; $customersY)
-			$similarity:=$customerX.vector.cosineSimilarity($customerY.vector)
-			If ($similarity>=$targetSimilarity)
-				$customersCol:=This.pushCustomerSimilarity($customersCol; $customerX; $customerY; $similarity)
-			End if 
-		End for each 
+		If ($customerX.vector#Null)
+			$customersY:=$customersX.slice($customerX.indexOf()+1)
+			For each ($customerY; $customersY)
+				If ($customerY.vector#Null)
+					$similarity:=$customerX.vector.cosineSimilarity($customerY.vector)
+					If ($similarity>=$targetSimilarity)
+						$customersCol:=This.pushCustomerSimilarity($customersCol; $customerX; $customerY; $similarity)
+					End if 
+				End if 
+				
+			End for each 
+		End if 
+		
 	End for each 
 	
 	For each ($objCustomer; $customersCol)

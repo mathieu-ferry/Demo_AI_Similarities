@@ -17,10 +17,8 @@ property quantity : Integer
 
 Class extends AI_Agent
 
-
 singleton Class constructor()
 	Super()
-	//This.setAgent($providerName; $model)
 	This.responseData:=""
 	This.addressExpectedSchema:={streetNumber: "number as string"; streetName: "street name"; apartment: "number as string"; builing: "building"; poBox: "po box"; city: "city"; region: "region"; postalCode: "postal code as string"; country: "country"}
 	This.customerExpectedSchema:={firstname: "firstname"; lastname: "lastname"; email: "firstname.lastname@randomdomain.com"; phone: "random phone number as string"; address: This.addressExpectedSchema}
@@ -161,8 +159,6 @@ Function generateCustomers($quantity : Integer; $quantityBy : Integer; $callback
 	
 	
 Function anotherOnData($result : cs.AIKit.OpenAIChatCompletionsResult)
-	
-	
 	If ($result.success)
 		cs.AI_DataGenerator.me.responseData+=$result.choice.delta.text
 		cs.AI_DataGenerator.me.UICallback_onData.call(Form; $result.choice.delta.text)

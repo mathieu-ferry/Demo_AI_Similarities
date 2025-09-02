@@ -3,6 +3,7 @@ property modelsGen : Object
 property newCustomer : cs.customerEntity
 property similarCustomers : Collection
 property actions : Object
+property AIText : Text
 
 Class constructor()
 	var $providers : cs.providerSettingsSelection
@@ -49,7 +50,11 @@ Function providersGenListEventHandler($formEventCode : Integer)
 			This.modelsGen:=This.setModelList(This.providersGen; "reasonning")
 	End case 
 	
+	
 Function btnGenerateCustomerEventHandler($formEventCode : Integer)
+	var $formulaCallback : 4D.Function
+	var $callbackObject : Object
+	
 	Case of 
 		: ($formEventCode=On Clicked)
 			This.actions.generatingCustomer:={running: 1; progress: {value: 0; message: "Generating customer with AI"}; timing: 0}
@@ -63,8 +68,15 @@ Function btnGenerateCustomerEventHandler($formEventCode : Integer)
 			OBJECT SET VISIBLE(*; "customerGen@"; True)
 			OBJECT SET VISIBLE(*; "addressFormatting@"; False)
 			OBJECT SET VISIBLE(*; "similaritiesSearch@"; False)
-			CALL WORKER(String(Session.id)+"-generatingCustomer"; Formula(cs.workerHelper.me.generateCustomer($1; $2)); Form; Current form window)
+			
+			$callbackObject:={}
+			$callbackObject.onProgress:=This.progressAIGenerate
+			$callbackObject.onTerminate:=This.terminateGenerateCustomer
+			Form.AIText:=""
+			cs.AI_CustomerGenerator.me.setAgent(This.providersGen.currentValue; This.modelsGen.currentValue)
+			cs.AI_CustomerGenerator.me.generateCustomerAsync($callbackObject)
 	End case 
+	
 	
 Function btnFormatAddressEventHandler($formEventCode : Integer)
 	Case of 
@@ -76,9 +88,16 @@ Function btnFormatAddressEventHandler($formEventCode : Integer)
 				
 				OBJECT SET VISIBLE(*; "addressFormatting@"; True)
 				OBJECT SET VISIBLE(*; "similaritiesSearch@"; False)
-				CALL WORKER(String(Session.id)+"-formattingAddress"; Formula(cs.workerHelper.me.formatAddress($1; $2)); Form; Current form window)
+				
+				$callbackObject:={}
+				$callbackObject.onProgress:=This.progressAIGenerate
+				$callbackObject.onTerminate:=This.terminateAddressFormatting
+				Form.AIText:=""
+				cs.AI_AddressFormatter.me.setAgent(This.providersGen.currentValue; This.modelsGen.currentValue)
+				cs.AI_AddressFormatter.me.formatAddressAsync(Form.actions.formattingAddress.textToFormat; $callbackObject)
 			End if 
 	End case 
+	
 	
 Function btnSearchSimilaritiesEventHandler($formEventCode : Integer)
 	Case of 
@@ -103,13 +122,11 @@ Function btnSaveCustomerEventHandler($formEventCode : Integer)
 		: ($formEventCode=On Clicked)
 			If (This.newCustomer.valid)
 				This.newCustomer.saveAndVectorize()
+				ALERT("Customer saved")
 			Else 
-				throw(999; "Customer cannot be saved, check your data")
+				ALERT("Customer cannot be saved, check your data")
 			End if 
 	End case 
-	
-	
-	
 	
 Function rulerSimilarityEventHandler($formEventCode : Integer)
 	Case of 
@@ -123,50 +140,58 @@ Function rulerSimilarityEventHandler($formEventCode : Integer)
 	//MARK: -
 	//MARK: Form actions callback functions
 	
-Function terminateGenerateCustomer_($customerObject : Object; $timing : Integer)
-	var $addressObj : Object
 	
-	OBJECT SET VISIBLE(*; "customerGenSpinner"; False)
-	Form.newCustomer:=ds.customer.newCustomerFromObject($customerObject)
-	Form.actions.generatingCustomer:={running: 0; progress: {value: 100; message: "Customer generated in "+String($timing)+" ms"}; timing: $timing}
-	
-/*// Launch similarity search afterwards
-OBJECT SET VISIBLE(*; "similaritiesSearch@"; True)
-Form.actions.searchingSimilarities.running:=1*/
-	
-	Form.btnSearchSimilaritiesEventHandler(On Clicked)
-	
-	CALL WORKER(String(Session.id)+"-searchingSimilarities"; Formula(cs.workerHelper.me.searchSimilarCustomers($1; $2; $3)); Form; Form.newCustomer.toObject(); Current form window)
-	
-Function terminateGenerateCustomer($customerObject : Object; $timing : Integer)
-	EXECUTE METHOD IN SUBFORM("Subform"; This.terminateGenerateCustomer_; *; $customerObject; $timing)
-	
-Function terminateAddressFormatting_($addressObject : cs.address; $timing : Integer)
-	OBJECT SET VISIBLE(*; "addressFormattingSpinner"; False)
-	Form.newCustomer.address:=$addressObject
-	Form.actions.formattingAddress.timing:=$timing
-	Form.actions.formattingAddress.progress.message:="Address formatted in "+String($timing)+" ms"
-	
+Function terminateGenerateCustomer($customer : cs.customerEntity; $timing : Integer)
+	If (Current form name="menu")
+		EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.terminateGenerateCustomer($1; $2)); *; $customer; $timing)
+	Else 
+		OBJECT SET VISIBLE(*; "customerGenSpinner"; False)
+		Form.newCustomer:=$customer
+		Form.actions.generatingCustomer:={running: 0; progress: {value: 100; message: "Customer generated in "+String($timing)+" ms"}; timing: $timing}
+		
+		Form.btnSearchSimilaritiesEventHandler(On Clicked)
+		
+	End if 
 	
 Function terminateAddressFormatting($addressObject : cs.address; $timing : Integer)
-	EXECUTE METHOD IN SUBFORM("Subform"; This.terminateAddressFormatting_; *; $addressObject; $timing)
+	If (Current form name="menu")
+		EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.terminateAddressFormatting($1; $2)); *; $addressObject; $timing)
+	Else 
+		OBJECT SET VISIBLE(*; "addressFormattingSpinner"; False)
+		Form.newCustomer.address:=$addressObject
+		Form.actions.formattingAddress.timing:=$timing
+		Form.actions.formattingAddress.progress.message:="Address formatted in "+String($timing)+" ms"
+	End if 
 	
+Function progressAIGenerate($resultText : Text)
+	If (Current form name="menu")
+		EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.progressAIGenerate($1; $2)); *; $resultText)
+	Else 
+		Form.AIText+=$resultText
+		//scroll down
+		HIGHLIGHT TEXT(*; "InputAIText"; Length(Form.AIText); Length(Form.AIText))
+		GOTO OBJECT(*; "InputAIText")
+	End if 
 	
-Function terminateSearchSimilarCustomers_($similarCustomers : Collection; $timing : Integer)
-	var $entry : Object
-	
-	For each ($entry; $similarCustomers)
-		$entry.entity:=ds.customer.get($entry.customerID)
-	End for each 
-	
-	OBJECT SET VISIBLE(*; "similaritiesSearchSpinner"; False)
-	Form.similarCustomers:=$similarCustomers
-	Form.actions.searchingSimilarities.timing:=$timing
-	Form.actions.searchingSimilarities.progress.message:=String($similarCustomers.length)+" "+\
-		(($similarCustomers.length<=1) ? "similarity" : "similarities")+" found in "+String($timing)+" ms"
 	
 Function terminateSearchSimilarCustomers($similarCustomers : Collection; $timing : Integer)
-	EXECUTE METHOD IN SUBFORM("Subform"; This.terminateSearchSimilarCustomers_; *; $similarCustomers; $timing)
+	var $entry : Object
+	
+	If (Current form name="menu")
+		EXECUTE METHOD IN SUBFORM("Subform"; Formula(Form.terminateSearchSimilarCustomers($1; $2)); *; $similarCustomers; $timing)
+	Else 
+		
+		For each ($entry; $similarCustomers)
+			$entry.entity:=ds.customer.get($entry.customerID)
+		End for each 
+		
+		OBJECT SET VISIBLE(*; "similaritiesSearchSpinner"; False)
+		Form.similarCustomers:=$similarCustomers
+		Form.actions.searchingSimilarities.timing:=$timing
+		Form.actions.searchingSimilarities.progress.message:=String($similarCustomers.length)+" "+\
+			(($similarCustomers.length<=1) ? "similarity" : "similarities")+" found in "+String($timing)+" ms"
+		
+	End if 
 	
 	
 	
